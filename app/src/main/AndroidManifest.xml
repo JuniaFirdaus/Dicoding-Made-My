@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="e.juna.mynavigationasynctask">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+
+    <permission
+        android:name="e.juna.mynavigationasynctask.READ_DATABASE"
+        android:protectionLevel="normal" />
+    <permission
+        android:name="e.juna.mynavigationasynctask.WRITE_DATABASE"
+        android:protectionLevel="normal" />
+
+    <uses-permission android:name="e.juna.mynavigationasynctask.READ_DATABASE" />
+    <uses-permission android:name="e.juna.mynavigationasynctask.WRITE_DATABASE" />
+
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/mov"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".MovieFavoriteContentProvider.ActivityFavorite" />
+        <activity android:name=".GakDipakeMovieFavoriteSQLITE.DetailActivity" />
+        <activity android:name=".GakDipakeContentDua.DetailActivityContent" />
+        <activity android:name=".GakDipakeContentDua.DisplayContentActivity" />
+        <activity android:name=".NotifDailyReminder.MainActivityDaily" />
+        <activity android:name=".DetailActivity" />
+
+        <provider
+            android:name=".MovieFavoriteContentProvider.provider.NoteProvider"
+            android:authorities="e.juna.mynavigationasynctask"
+            android:exported="true"
+            android:readPermission="e.juna.mynavigationasynctask.READ_DATABASE"
+            android:writePermission="e.juna.mynavigationasynctask.WRITE_DATABASE" />
+
+        <service
+            android:name=".GakDipakeNotifMovieNow.GetMovieGCM"
+            android:exported="true"
+            android:permission="com.google.android.gms.permission.BIND_NETWORK_TASK_SERVICE">
+            <intent-filter>
+                <action android:name="com.google.android.gms.gcm.ACTION_TASK_READY" />
+            </intent-filter>
+        </service>
+
+        <receiver
+            android:name=".NotifDailyReminder.AlarmReceiver"
+            android:enabled="true"
+            android:exported="true" />
+
+
+        <!-- App Widget 2 w/ Service -->
+        <!--<receiver-->
+            <!--android:name=".WidgetContoh.EmployeeWidgetProvider2"-->
+            <!--android:label="Employee Widget 2" >-->
+            <!--<intent-filter>-->
+                <!--<action android:name="android.appwidget.action.APPWIDGET_UPDATE" />-->
+            <!--</intent-filter>-->
+
+            <!--<meta-data-->
+                <!--android:name="android.appwidget.provider"-->
+                <!--android:resource="@xml/widget" />-->
+        <!--</receiver>-->
+
+        <!--<service android:name=".WidgetContoh.EmployeeWidgetService2" />-->
+
+
+
+        <receiver android:name=".WidgetMovie.ImagesBannerWidget">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/image_banner_widget_info" />
+        </receiver>
+
+        <service
+            android:name=".WidgetMovie.StackWidgetService"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
+
+
+    </application>
+
+</manifest>

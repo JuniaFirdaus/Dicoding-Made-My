@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".DetailActivity"
+    tools:showIn="@layout/detail_activity">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        tools:ignore="ExtraText">
+
+
+
+        <TextView
+            style="@style/TextContent.Black"
+            android:id="@+id/movie_title"
+            android:textSize="32sp"
+            android:text="@string/title"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:layout_marginBottom="8dp"/>
+        <TextView
+            style="@style/TextContent.Subtitle"
+            android:id="@+id/movie_description"
+            android:text="@string/deskripsi"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"/>
+
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:layout_marginBottom="@dimen/activity_vertical_margin">
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp">
+                <TextView
+                    style="@style/TextSpec.Field"
+                    android:text="@string/releaseDate"/>
+                <TextView
+                    android:id="@+id/movie_releaseDate"
+                    style="@style/TextSpec.Value"
+                    android:text="@string/releaseDate"/>
+            </TableRow>
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp">
+                <TextView
+                    style="@style/TextSpec.Field"
+                    android:text="@string/original_title"/>
+                <TextView
+                    style="@style/TextSpec.Value"
+                    android:id="@+id/original_title"
+                    android:text="@string/original_title"/>
+            </TableRow>
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp">
+                <TextView
+                    style="@style/TextSpec.Field"
+                    android:text="@string/original_language"/>
+                <TextView
+                    style="@style/TextSpec.Value"
+                    android:id="@+id/original_language"
+                    android:text="@string/original_language"/>
+            </TableRow>
+        </TableLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:layout_marginBottom="@dimen/activity_vertical_margin">
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:src="@drawable/dico"
+                android:layout_centerVertical="true"
+                android:id="@+id/profile_image"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:layout_marginEnd="@dimen/activity_horizontal_margin" />
+            <TextView
+                style="@style/TextContent"
+                android:layout_toRightOf="@id/profile_image"
+                android:text="@string/dicoding"
+                android:layout_centerVertical="true"/>
+        </RelativeLayout>
+        <Button
+            style="@style/ButtonGeneral"
+            android:id="@+id/btnFav"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/fav"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"/>
+
+
+
+    </LinearLayout>
+</android.support.v4.widget.NestedScrollView>

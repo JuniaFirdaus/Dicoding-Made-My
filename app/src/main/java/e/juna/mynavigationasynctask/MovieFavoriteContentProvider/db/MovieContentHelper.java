@@ -1,0 +1,187 @@
+package e.juna.mynavigationasynctask.MovieFavoriteContentProvider.db;
+
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.Cursor;
+import android.database.SQLException;
+import android.database.sqlite.SQLiteDatabase;
+
+import java.util.ArrayList;
+
+import e.juna.mynavigationasynctask.MovieFavoriteContentProvider.entity.MovieContent;
+
+import static android.provider.BaseColumns._ID;
+import static e.juna.mynavigationasynctask.MovieFavoriteContentProvider.db.DatabaseContract.NoteColumns.IMAGE;
+import static e.juna.mynavigationasynctask.MovieFavoriteContentProvider.db.DatabaseContract.NoteColumns.OVERVIEW;
+import static e.juna.mynavigationasynctask.MovieFavoriteContentProvider.db.DatabaseContract.NoteColumns.RELEASEDATE;
+import static e.juna.mynavigationasynctask.MovieFavoriteContentProvider.db.DatabaseContract.NoteColumns.TITLE;
+import static e.juna.mynavigationasynctask.MovieFavoriteContentProvider.db.DatabaseContract.TABLE_NOTE;
+
+/**
+ * Created by Juna on 2/17/2018.
+ */
+
+public class MovieContentHelper {
+    private static String DATABASE_TABLE = TABLE_NOTE;
+    private Context context;
+    private DatabaseHelper dataBaseHelper;
+
+    private SQLiteDatabase database;
+
+    public MovieContentHelper(Context context){
+        this.context = context;
+    }
+
+    public MovieContentHelper open() throws SQLException {
+        dataBaseHelper = new DatabaseHelper(context);
+        database = dataBaseHelper.getWritableDatabase();
+        return this;
+    }
+
+    public void close(){
+        dataBaseHelper.close();
+    }
+
+    /*
+    METHOD DIBAWAH INI UNTUK QUERY YANG LAMA ATAU UNTUK PROJECT SQLITE
+     */
+
+    /**
+     * Gunakan method ini untuk ambil semua note yang ada
+     * Otomatis di parsing ke dalam model MovieContent
+     * @return hasil query berbentuk array model note
+     */
+    public ArrayList<MovieContent> query(){
+        ArrayList<MovieContent> arrayList = new ArrayList<MovieContent>();
+        Cursor cursor = database.query(DATABASE_TABLE
+                ,null
+                ,null
+                ,null
+                ,null
+                ,null,_ID +" DESC"
+                ,null);
+        cursor.moveToFirst();
+        MovieContent note;
+        if (cursor.getCount()>0) {
+            do {
+
+                note = new MovieContent();
+                note.setId(cursor.getInt(cursor.getColumnIndexOrThrow(_ID)));
+                note.setTitle(cursor.getString(cursor.getColumnIndexOrThrow(TITLE)));
+                note.setDescription(cursor.getString(cursor.getColumnIndexOrThrow(OVERVIEW)));
+                note.setDate(cursor.getString(cursor.getColumnIndexOrThrow(RELEASEDATE)));
+                note.setImage(cursor.getString(cursor.getColumnIndexOrThrow(IMAGE)));
+
+                arrayList.add(note);
+                cursor.moveToNext();
+
+            } while (!cursor.isAfterLast());
+        }
+        cursor.close();
+        return arrayList;
+    }
+
+    /**
+     * Gunakan method ini untuk query insert
+     * @param note model note yang akan dimasukkan
+     * @return id dari data yang baru saja dimasukkan
+     */
+    public long insert(MovieContent note){
+        ContentValues initialValues =  new ContentValues();
+        initialValues.put(TITLE, note.getTitle());
+        initialValues.put(OVERVIEW, note.getDescription());
+        initialValues.put(RELEASEDATE, note.getDate());
+        initialValues.put(IMAGE, note.getImage());
+        return database.insert(DATABASE_TABLE, null, initialValues);
+    }
+
+    /**
+     * Gunakan method ini untuk query update
+     * @param note model note yang akan diubah
+     * @return int jumlah dari row yang ter-update, jika tidak ada yang diupdate maka nilainya 0
+     */
+    public int update(MovieContent note){
+        ContentValues args = new ContentValues();
+        args.put(TITLE, note.getTitle());
+        args.put(OVERVIEW, note.getDescription());
+        args.put(RELEASEDATE, note.getDate());
+        args.put(IMAGE, note.getImage());
+        return database.update(DATABASE_TABLE, args, _ID + "= '" + note.getId() + "'", null);
+    }
+
+    /**
+     * Gunakan method ini untuk query delete
+     * @param id id yang akan di delete
+     * @return int jumlah row yang di delete
+     */
+    public int delete(int id){
+        return database.delete(TABLE_NOTE, _ID + " = '"+id+"'", null);
+    }
+
+
+
+    /*
+    METHOD DI BAWAH INI ADALAH QUERY UNTUK CONTENT PROVIDER
+    NILAI BALIK CURSOR
+    */
+
+    /**
+     * Ambil data dari note berdasarakan parameter id
+     * Gunakan method ini untuk ambil data di dalam provider
+     * @param id id note yang dicari
+     * @return cursor hasil query
+     */
+    public Cursor queryByIdProvider(String id){
+        return database.query(DATABASE_TABLE,null
+                ,_ID + " = ?"
+                ,new String[]{id}
+                ,null
+                ,null
+                ,null
+                ,null);
+    }
+
+    /**
+     * Ambil data dari semua note yang ada di dalam database
+     * Gunakan method ini untuk ambil data di dalam provider
+     * @return cursor hasil query
+     */
+    public Cursor queryProvider(){
+        return database.query(DATABASE_TABLE
+                ,null
+                ,null
+                ,null
+                ,null
+                ,null
+                ,_ID + " DESC");
+    }
+
+    /**
+     * Simpan data ke dalam database
+     * Gunakan method ini untuk query insert di dalam provider
+     * @param values nilai data yang akan di simpan
+     * @return long id dari data yang baru saja di masukkan
+     */
+    public long insertProvider(ContentValues values){
+        return database.insert(DATABASE_TABLE,null,values);
+    }
+
+    /**
+     * Update data dalam database
+     * @param id data dengan id berapa yang akan di update
+     * @param values nilai data baru
+     * @return int jumlah data yang ter-update
+     */
+    public int updateProvider(String id,ContentValues values){
+        return database.update(DATABASE_TABLE,values,_ID +" = ?",new String[]{id} );
+    }
+
+    /**
+     * Delete data dalam database
+     * @param id data dengan id berapa yang akan di delete
+     * @return int jumlah data yang ter-delete
+     */
+    public int deleteProvider(String id){
+        return database.delete(DATABASE_TABLE,_ID + " = ?", new String[]{id});
+    }
+}
